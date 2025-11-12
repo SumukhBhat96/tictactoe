@@ -6,6 +6,18 @@
     <title>Tic Tac Toe</title>
     <script type="module" crossorigin src="./assets/index-DV-NHjaK.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-0K-6E2VJ.css">
+    <style>
+/* immediate mobile override — only temporary */
+@media (max-width:520px){
+  html,body{overflow-x:hidden!important}
+  .card.game-card{max-width:380px!important;margin:0 auto!important}
+  .board-grid{width:94vw!important;gap:8px!important;padding:6px!important}
+  .cell{height:calc((min(360px,94vw)-20px)/3)!important;border-radius:10px!important}
+  .title-wrap h1{font-size:1.05rem!important}
+  .score-col .value{font-size:1.1rem!important}
+}
+</style>
+
   </head>
   <body>
     <div id="root"></div>
