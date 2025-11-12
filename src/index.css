@@ -453,3 +453,126 @@ body {
 .hidden { display:none !important; }
 
 
+/* ------------------------------
+  Mobile friendliness patch
+  Paste this at the END of src/index.css
+  ------------------------------ */
+
+/* stop any accidental horizontal scrolling */
+html, body {
+  overflow-x: hidden !important;
+}
+
+/* shrink outer padding on small devices */
+@media (max-width:480px) {
+  body {
+    padding: 10px !important;
+  }
+
+  .app-shell {
+    padding: 6px !important;
+    align-items: flex-start;
+  }
+
+  /* narrow the main card, center it, and reduce side margin */
+  .card.game-card {
+    width: 100% !important;
+    max-width: 380px !important;
+    margin: 0 auto !important;
+    border-radius: 12px;
+    padding-bottom: 8px;
+  }
+
+  /* header adjustments */
+  .card-header-modern {
+    padding: 12px 12px 8px;
+    gap: 8px;
+  }
+  .title-wrap h1 {
+    font-size: 1.05rem !important;
+    line-height: 1.05;
+  }
+  .title-wrap small {
+    font-size: 0.78rem !important;
+  }
+
+  .header-actions {
+    justify-content: center !important;
+    width: 100%;
+    gap: 6px;
+  }
+  .header-actions .btn { padding: 6px 8px; font-size: 0.78rem; min-height: 30px; }
+
+  /* board container reduced padding */
+  .board-container {
+    padding: 10px !important;
+    border-radius: 10px;
+  }
+
+  /* make the grid fit the viewport width (3 cells across) */
+  .board-grid {
+    width: min(360px, 94vw) !important;
+    gap: 10px !important;
+    padding: 6px !important;
+  }
+
+  /* tighter, square cells that always fit */
+  .cell {
+    border-radius: 10px;
+    height: calc((min(360px,94vw) - 20px) / 3) !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.22);
+    margin: 0;
+  }
+
+  /* avatars & X/O scale down */
+  .cell .avatar { width: 70%; height: 70%; }
+  .xo { font-size: clamp(28px, 8vw, 56px) !important; }
+
+  /* status row: stack and center on mobile */
+  .status-row {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 8px;
+  }
+  .status-left {
+    font-size: 0.95rem !important;
+  }
+  .controls { display:flex; gap:8px; justify-content:center; }
+
+  /* scoreboard: stack items vertically & center */
+  .scoreboard {
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 8px !important;
+    gap: 6px;
+  }
+  .score-col .label { font-size: 0.85rem !important; color: var(--muted) !important; }
+  .score-col .value { font-size: 1.2rem !important; }
+
+  .reset-wrap { padding: 10px 8px 14px 8px; justify-content:center; }
+
+  /* reduce popup width on mobile */
+  .result-card { width: min(420px, 94vw) !important; padding: 16px; border-radius: 12px; }
+  .result-icon { width: 56px; height: 56px; }
+
+  /* ensure header controls never overflow horizontally */
+  .header-actions .btn { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* soften side gradients so card doesn't appear pushed sideways */
+  body::before, body::after { display:none !important; }
+
+  /* make sure outlines / boundaries stay visible */
+  .card.game-card, .card-body-modern { overflow: visible !important; }
+
+  /* small helper to keep board vertically centered on very tall displays */
+  main, .app-shell > .card.game-card { margin-top: 8px; margin-bottom: 16px; }
+}
+
+/* Additional tweak for slightly larger phones & small tablets */
+@media (min-width:481px) and (max-width:700px) {
+  .card.game-card { max-width: 520px; width: 94%; margin: 0 auto; }
+  .board-grid { width: min(460px,92vw); gap:12px; }
+  .cell { height: calc((min(460px,92vw) - 36px) / 3); border-radius: 12px; }
+  .title-wrap h1 { font-size: 1.1rem; }
+}
