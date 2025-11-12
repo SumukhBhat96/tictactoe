@@ -1,65 +1,74 @@
 // src/components/Board.jsx
 import React from 'react';
-import Cell from './Cell';
 import { AVATARS } from './Avatars';
 
 /*
-  Board supports:
-    - board: array of 9 ('A'|'B'|null)
-    - onPlay(index)
-    - winningLine: array
-    - symbolMode: 'xo' | 'icons'
-    - avatars: { A: 'Rocket', B: 'Planet' }
+ Props:
+  - board: Array(9) of null | 'A' | 'B'
+  - onPlay(index)
+  - winningLine: array of indices or []
+  - symbolMode: 'icons' | 'xo'
+  - avatars: { A: 'Ghost', B: 'Skull' }
 */
+
 export default function Board({
-  board,
-  onPlay,
+  board = Array(9).fill(null),
+  onPlay = () => {},
   winningLine = [],
-  symbolMode = 'xo',
-  avatars = { A: 'Rocket', B: 'Planet' }
+  symbolMode = 'icons',
+  avatars = { A: 'Ghost', B: 'Skull' }
 }) {
+  function renderAvatar(player) {
+    if (!player) return null;
+    const name = player === 'A' ? avatars.A : avatars.B;
+    const Comp = AVATARS[name] || null;
+    if (!Comp) return null;
+    return <Comp />;
+  }
+
   return (
-    <div className="board-grid" role="grid" aria-label="tic tac toe board">
-      {board.map((v, i) => {
-        const isWin = Array.isArray(winningLine) && winningLine.includes(i);
+    <div className="board-container">
+      <div className="board-grid" role="grid" aria-label="Tic Tac Toe board">
+        {board.map((cell, i) => {
+          const isWinning = Array.isArray(winningLine) && winningLine.includes(i);
+          const cls = `cell ${isWinning ? 'win-pulse' : ''}`;
 
-        // content will be the actual element rendered inside cell
-        let content = null;
-
-        if (v === 'A') {
-          if (symbolMode === 'xo') {
-            content = <span className="xo x" aria-hidden>X</span>;
-          } else {
-            const Avatar = AVATARS[avatars.A] || AVATARS.Rocket;
-            // NOTE: we add data-player so CSS can color SVG via `color`
-            content = (
-              <div className="avatar" data-player="A" aria-hidden>
-                <Avatar size={84} />
-              </div>
-            );
-          }
-        } else if (v === 'B') {
-          if (symbolMode === 'xo') {
-            content = <span className="xo o" aria-hidden>O</span>;
-          } else {
-            const Avatar = AVATARS[avatars.B] || AVATARS.Planet;
-            content = (
-              <div className="avatar" data-player="B" aria-hidden>
-                <Avatar size={84} />
-              </div>
-            );
-          }
-        }
-
-        return (
-          <Cell
-            key={i}
-            value={content}
-            onClick={() => onPlay(i)}
-            isWinning={isWin}
-          />
-        );
-      })}
+          return (
+            <button
+              key={i}
+              className={cls}
+              onClick={() => onPlay(i)}
+              role="gridcell"
+              aria-label={`Square ${i + 1}`}
+              aria-pressed={!!cell}
+              style={{ background: 'transparent', border: 'none', padding: 0 }}
+            >
+              {symbolMode === 'xo' ? (
+                cell ? (
+                  <span className={`xo ${cell === 'A' ? 'x' : 'o'}`} aria-hidden>
+                    {cell === 'A' ? 'X' : 'O'}
+                  </span>
+                ) : null
+              ) : (
+                cell ? (
+                  <div
+                    className="avatar"
+                    data-player={cell}
+                    aria-hidden="true"
+                    style={{ color: cell === 'A' ? 'var(--primary)' : 'var(--accent)' }}
+                  >
+                    {renderAvatar(cell)}
+                  </div>
+                ) : (
+                  <div className="avatar empty" aria-hidden data-player="">
+                    {/* empty placeholder */}
+                  </div>
+                )
+              )}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
